@@ -17,7 +17,6 @@ Also see http://click.pocoo.org/5/setuptools/#setuptools-integration.
 
 import argparse
 import os
-import sys
 from functools import lru_cache
 from pathlib import Path
 
@@ -166,7 +165,7 @@ def main(args=None):
     if not args.no_confirm:
         for item in buffer:
             original, new = item["original"], item["new"]
-            answer = input(f"mv '{original}' '{new}' [Yn] ")
+            answer = input(f"mv '{original}' '{new}' [Yn] ")  # nosec
             if answer not in ("", "y", "Y"):
                 item["answer"] = False
 
