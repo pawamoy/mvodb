@@ -1,6 +1,6 @@
 {
     "template": "https://github.com/pawamoy/cookie-poetry",
-    "commit": "39e751de4fda3c136fee27778e661365a47b9b2a",
+    "commit": "100ae2b062d37c064f20f99e8f45693d8ca99325",
     "context": {
         "cookiecutter": {
             "project_name": "mvodb",
