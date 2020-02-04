@@ -38,6 +38,7 @@ pytest-cov = "*"
 pytest-sugar = "*"
 pytest-xdist = "*"
 safety = "*"
+requests = "^2.22.0"
 
 [tool.poetry.scripts]
 mvodb = "mvodb.cli:main"
