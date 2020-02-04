@@ -69,7 +69,7 @@ class Guess:
         if self.data["ext"] == "srt":
             try:
                 self.data["lang"] = self.data["subtitle_language"].alpha3
-            except (KeyError:
+            except (KeyError, AttributeError):
                 with open(self.data["filename"]) as stream:
                     text = stream.read()
                 if text:
@@ -168,7 +168,7 @@ def main(args=None):
             if answer not in ("", "y", "Y"):
                 item["answer"] = False
 
-    for item in [i in buffer if i["answer"]]:
+    for item in [i for i in buffer if i["answer"]]:
         Path(item["new"]).parent.mkdir(parents=True, exist_ok=True)
         os.rename(item["original"], item["new"])
 
