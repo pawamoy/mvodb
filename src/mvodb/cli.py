@@ -18,19 +18,19 @@ Also see http://click.pocoo.org/5/setuptools/#setuptools-integration.
 import argparse
 import os
 import sys
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
 
-from langdetect import detect
-from langdetect.lang_detect_exception import LangDetectException
 import tmdbsimple as tmdb
 from guessit import guessit
-
+from langdetect import detect
+from langdetect.lang_detect_exception import LangDetectException
 
 tmdb.API_KEY = os.environ.get("TMDB_API_KEY")
 
 
 LANG = {"English": "eng", "French": "fre"}
+
 
 class Guess:
     def __init__(self, name):
@@ -139,7 +139,9 @@ def filter_ext(files, whitelist):
 def get_parser():
     parser = argparse.ArgumentParser(prog="mvodb")
     parser.add_argument("files", nargs="+", metavar="FILE", help="Files to move/rename.")
-    parser.add_argument("-y", "--no-confirm", action="store_true", default=False, dest="no_confirm", help="Do not ask confirmation.")
+    parser.add_argument(
+        "-y", "--no-confirm", action="store_true", default=False, dest="no_confirm", help="Do not ask confirmation."
+    )
     return parser
 
 

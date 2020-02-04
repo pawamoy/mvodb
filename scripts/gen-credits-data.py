@@ -30,7 +30,7 @@ for dependency in direct_dependencies + indirect_dependencies:
         info = requests.get(f"https://pypi.python.org/pypi/{dependency}/json").json()["info"]
         package_info[info["name"]] = {
             "name": info["name"],
-            "home-page": info["home_page"] or info["project_url"] or info["package_url"]
+            "home-page": info["home_page"] or info["project_url"] or info["package_url"],
         }
 
 lower_package_info = {}
