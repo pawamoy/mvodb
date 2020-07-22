@@ -36,6 +36,7 @@ class Guess:
         self.data = guessit(name)
         self.data["filename"] = name
         self.data["ext"] = name.split(".")[-1]
+        self.fetch()
 
     def __hash__(self):
         if self.is_movie:
@@ -47,15 +48,6 @@ class Guess:
     def __eq__(self, other):
         return hash(self) == hash(other)
 
-    # def __eq__(self, other):
-    #     if self.type != other.type:
-    #         return False
-    #     if self.is_movie:
-    #         return self.title == other.title and self.release_date == other.release_date
-    #     elif self.is_episode:
-    #         return self.title == other.title and self.season == other.season and self.episode == other.episode
-    #     return self.data == other.data
-
     @property
     def is_episode(self):
         return self.data["type"] == "episode"
@@ -64,7 +56,7 @@ class Guess:
     def is_movie(self):
         return self.data["type"] == "movie"
 
-    def get_new_path(self):
+    def fetch(self):
         if self.data["ext"] == "srt":
             try:
                 self.data["lang"] = self.data["subtitle_language"].alpha3
@@ -77,38 +69,47 @@ class Guess:
                     except LangDetectException:
                         pass
         if self.is_episode:
-            self.data.update(get_info_episode(self.data["title"], self.data["season"], self.data["episode"]))
+            self.data["matches"] = get_episode_matches(self.data["title"], self.data["season"], self.data["episode"])
+        elif self.is_movie:
+            self.data["matches"] = get_movie_matches(self.data["title"])
+        raise ValueError
+
+    def get_new_path(self, match_index=0):
+        if self.is_episode:
             return episode_to_path(self.data)
         elif self.is_movie:
-            self.data.update(get_info_movie(self.data["title"]))
             return movie_to_path(self.data)
         raise ValueError
 
 
 @lru_cache()
-def get_info_episode(title, season_number, episode_number):
+def get_episode_matches(title, season_number, episode_number):
     search = tmdb.Search()
     search.tv(query=title)
-    tv_show = search.results[0]
-    episode = tmdb.TV_Episodes(tv_show["id"], season_number, episode_number)
-    episode.info()
-    return {
-        "tvshow": tv_show["name"],
-        "season": season_number,
-        "episode": episode_number,
-        "title": episode.name,
-    }
+    results = []
+    for tv_show in search.results[:3]:
+        episode = tmdb.TV_Episodes(tv_show["id"], season_number, episode_number)
+        episode.info()
+        results.append({
+            "tvshow": tv_show["name"],
+            "season": season_number,
+            "episode": episode_number,
+            "title": episode.name,
+        })
+    return results
 
 
 @lru_cache()
-def get_info_movie(title):
+def get_movie_matches(title):
     search = tmdb.Search()
     search.movie(query=title)
-    movie = search.results[0]
-    return {
-        "title": movie["title"],
-        "year": movie["release_date"].split("-")[0],
-    }
+    results = []
+    for movie in search.results[:3]:
+        results.append({
+            "title": movie["title"],
+            "year": movie["release_date"].split("-")[0],
+        })
+    return results
 
 
 def episode_to_path(data):
@@ -174,3 +175,33 @@ def main(args=None):
         os.rename(item["original"], item["new"])
 
     return 0
+
+
+# for each file found
+#   guess components
+#   reduce components to necessary ones only
+#   fetch matches online
+#   put matches in cache for these components (without extension)
+#   append file path, file ext and matches to a list
+
+# if later review
+#   print list as json to stdout or specified output file
+
+# if needs confirmation
+#   for each item in the list
+#       for each match
+#           ask user if correct
+#           if yes append item file path and ext + match in other list and break
+
+# https://stackoverflow.com/questions/53486744/
+# async for each file found
+#   get components
+#       guess components
+#       reduce components
+#   async retrieve matches
+#   (sort by best match, or put best match on top)
+#   build review
+#   async review
+#       for each match
+#           async
+
