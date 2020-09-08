@@ -1,24 +1,21 @@
-"""
-Module that contains the command line application.
+# Why does this file exist, and why not put this in `__main__`?
+#
+# You might be tempted to import things from `__main__` later,
+# but that will cause problems: the code will get executed twice:
+#
+# - When you run `python -m mvodb` python will execute
+#   `__main__.py` as a script. That means there won't be any
+#   `mvodb.__main__` in `sys.modules`.
+# - When you import `__main__` it will get executed again (as a module) because
+#   there's no `mvodb.__main__` in `sys.modules`.
 
-Why does this file exist, and why not put this in __main__?
-
-You might be tempted to import things from __main__ later,
-but that will cause problems: the code will get executed twice:
-
-- When you run `python -m mvodb` python will execute
-  ``__main__.py`` as a script. That means there won't be any
-  ``mvodb.__main__`` in ``sys.modules``.
-- When you import __main__ it will get executed again (as a module) because
-  there's no ``mvodb.__main__`` in ``sys.modules``.
-
-Also see http://click.pocoo.org/5/setuptools/#setuptools-integration.
-"""
+"""Module that contains the command line application."""
 
 import argparse
 import os
 from functools import lru_cache
 from pathlib import Path
+from typing import List, Optional
 
 import tmdbsimple as tmdb
 from guessit import guessit
@@ -26,8 +23,6 @@ from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 
 tmdb.API_KEY = os.environ.get("TMDB_API_KEY")
-
-
 LANG = {"English": "eng", "French": "fre"}
 
 
@@ -136,7 +131,15 @@ def filter_ext(files, whitelist):
     return [f for f in files if os.path.splitext(f)[1][1:].lower() in whitelist]
 
 
-def get_parser():
+
+
+def get_parser() -> argparse.ArgumentParser:
+    """
+    Return the CLI argument parser.
+
+    Returns:
+        An argparse parser.
+    """
     parser = argparse.ArgumentParser(prog="mvodb")
     parser.add_argument("files", nargs="+", metavar="FILE", help="Files to move/rename.")
     parser.add_argument(
@@ -145,8 +148,18 @@ def get_parser():
     return parser
 
 
-def main(args=None):
-    """The main function, which is executed when you type ``mvodb`` or ``python -m mvodb``."""
+def main(args: Optional[List[str]] = None) -> int:
+    """
+    Run the main program.
+
+    This function is executed when you type `mvodb` or `python -m mvodb`.
+
+    Arguments:
+        args: Arguments passed from the command line.
+
+    Returns:
+        An exit code.
+    """
     parser = get_parser()
     args = parser.parse_args(args=args)
 
@@ -204,4 +217,3 @@ def main(args=None):
 #   async review
 #       for each match
 #           async
-

@@ -1,0 +1,35 @@
+site_name: "mvodb"
+site_description: "Rename and move files using metadata from online databases."
+site_url: "https://pawamoy.github.io/mvodb"
+repo_url: "https://github.com/pawamoy/mvodb"
+repo_name: "pawamoy/mvodb"
+
+nav:
+  - Overview: index.md
+  - Reference:
+    - cli.py: reference/cli.md
+  - Contributing: contributing.md
+  - Code of Conduct: code_of_conduct.md
+  - Changelog: changelog.md
+  - Credits: credits.md
+
+theme:
+  name: material
+
+extra_css:
+  - css/mkdocstrings.css
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - pymdownx.superfences
+  - pymdownx.emoji
+  - toc:
+      permalink: "¤"
+
+plugins:
+  - search
+  - mkdocstrings:
+      watch:
+        - src/mvodb
