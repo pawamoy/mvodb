@@ -85,12 +85,14 @@ def get_episode_matches(title, season_number, episode_number):
     for tv_show in search.results[:3]:
         episode = tmdb.TV_Episodes(tv_show["id"], season_number, episode_number)
         episode.info()
-        results.append({
-            "tvshow": tv_show["name"],
-            "season": season_number,
-            "episode": episode_number,
-            "title": episode.name,
-        })
+        results.append(
+            {
+                "tvshow": tv_show["name"],
+                "season": season_number,
+                "episode": episode_number,
+                "title": episode.name,
+            }
+        )
     return results
 
 
@@ -100,10 +102,12 @@ def get_movie_matches(title):
     search.movie(query=title)
     results = []
     for movie in search.results[:3]:
-        results.append({
-            "title": movie["title"],
-            "year": movie["release_date"].split("-")[0],
-        })
+        results.append(
+            {
+                "title": movie["title"],
+                "year": movie["release_date"].split("-")[0],
+            }
+        )
     return results
 
 
@@ -129,8 +133,6 @@ def movie_to_path(data):
 
 def filter_ext(files, whitelist):
     return [f for f in files if os.path.splitext(f)[1][1:].lower() in whitelist]
-
-
 
 
 def get_parser() -> argparse.ArgumentParser:
