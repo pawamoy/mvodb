@@ -1,1 +1,0 @@
-::: mvodb.cli
