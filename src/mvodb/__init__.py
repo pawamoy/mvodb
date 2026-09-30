@@ -1,9 +1,8 @@
-"""
-mvodb package.
+"""mvodb package.
 
 Rename and move files using metadata from online databases.
 """
 
-from typing import List
+from __future__ import annotations
 
-__all__: List[str] = []  # noqa: WPS410 (the only __variable__ we use)
+__all__: list[str] = []
