@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier
-_commit: 1.2.6
-_src_path: gh:pawamoy/copier-pdm.git
+_commit: 0.1.0
+_src_path: gh:pawamoy/copier-uv
 author_email: pawamoy@pm.me
 author_fullname: Timothée Mazzucotelli
 author_username: pawamoy
@@ -17,4 +17,3 @@ python_package_import_name: mvodb
 repository_name: mvodb
 repository_namespace: pawamoy
 repository_provider: github.com
-
